@@ -69,7 +69,10 @@ void shell_loop(char **argv, char **envp)
 				free(full_path); /* Libère le chemin alloué */
 			}
 			else /* Si la commande n'existe pas | ligne 99 */
+			{
 				fprintf(stderr, "%s: 1: %s: not found\n", argv[0], args[0]);
+				exit_status = 127;
+			}
 		}
 		free(args); /* Libère les arguments à la fin de l’itération */
 	}
