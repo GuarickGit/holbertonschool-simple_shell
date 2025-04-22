@@ -12,8 +12,9 @@
  * Si execve échoue dans le fils, celui-ci quitte avec le code 127
  * (convention Unix pour "commande non trouvée").
  */
-void execute_command(char *command, char **args, char **envp)
+int execute_command(char *command, char **args, char **envp)
 {
+	int status;
 	pid_t pid;
 
 	/* Création d'un nouveau processus */
@@ -23,7 +24,7 @@ void execute_command(char *command, char **args, char **envp)
 	if (pid == -1)
 	{
 		perror("fork"); /* Affiche une erreur si fork échoue */
-		return;
+		return (-1);
 	}
 
 	/* Code exécuté par le processus fils */
@@ -37,8 +38,10 @@ void execute_command(char *command, char **args, char **envp)
 	}
 	else
 	{
-		/* Code exécuté par le processus parent */
-		/* Attend la fin du processus fils */
-		wait(NULL);
+		wait(&status);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else
+			return (-1);  /* fin anormale */
 	}
 }
