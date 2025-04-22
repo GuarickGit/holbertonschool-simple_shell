@@ -54,7 +54,7 @@ void shell_loop(char **argv, char **envp)
 		{
 			if (handle_builtin(args, envp, line)) /* Si c'est un builtin */
 			{
-				free(args); /* Libère args, ligne libérée dans handle_builtin si exit */
+				/* free(args); Libère args, ligne libérée dans handle_builtin si exit */
 				continue; /* Repart pour une nouvelle commande */
 			}
 			full_path = find_full_path(args[0], envp); /* Cherche cmd dans PATH */
@@ -64,10 +64,7 @@ void shell_loop(char **argv, char **envp)
 				free(full_path); /* Libère le chemin alloué */
 			}
 			else /* Si la commande n'existe pas | ligne 99 */
-			{
 				fprintf(stderr, "%s: 1: %s: not found\n", argv[0], args[0]);
-				exit(0);
-			}
 		}
 		free(args); /* Libère les arguments à la fin de l’itération */
 	}
