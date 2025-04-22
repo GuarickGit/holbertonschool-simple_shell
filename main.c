@@ -30,25 +30,30 @@ void remove_trailing_newline(char *line)
 void shell_loop(char **argv, char **envp)
 {
 	char *line = NULL, *full_path; /* Ligne entrée + chemin final */
-	size_t len = 0; /* Taille allouée à getline */
-	ssize_t n_read; /* Nombre de caractères lus */
-	char **args; /* Tableau des mots (commande + args) */
+	size_t len = 0;				   /* Taille allouée à getline */
+	ssize_t n_read;				   /* Nombre de caractères lus */
+	char **args;				   /* Tableau des mots (commande + args) */
+	int exit_status = 0;
 
 	while (1) /* Boucle infinie du shell */
 	{
 		if (isatty(STDIN_FILENO)) /* Si entrée interactive (pas un pipe) */
-			printf("$ "); /* Affiche le prompt */
+			printf("$ ");		  /* Affiche le prompt */
 
 		n_read = getline(&line, &len, stdin); /* Attend que l'utilisateur tape */
-		if (n_read == -1) /* Si EOF (Ctrl+D) ou erreur */
+		if (n_read == -1)					  /* Si EOF (Ctrl+D) ou erreur */
 		{
-			printf("\n");
+			if (isatty(STDIN_FILENO))
+				printf("\n");
 			free(line); /* Libère la ligne si EOF */
-			exit(0);
+			if (!isatty(STDIN_FILENO))
+				exit(exit_status); /* mode non-interactif : on sort avec le bon code */
+			else
+				exit(0); /* mode interactif : on sort proprement */
 		}
 
 		remove_trailing_newline(line); /* Supprime le \n final de la ligne */
-		args = parse_line(line); /* Découpe la ligne en mots */
+		args = parse_line(line);	   /* Découpe la ligne en mots */
 
 		if (args[0] != NULL) /* Si la ligne n'était pas vide */
 		{
@@ -60,7 +65,7 @@ void shell_loop(char **argv, char **envp)
 			full_path = find_full_path(args[0], envp); /* Cherche cmd dans PATH */
 			if (full_path)
 			{
-				execute_command(full_path, args, envp); /* Exécute la commande */
+				exit_status = execute_command(full_path, args, envp);
 				free(full_path); /* Libère le chemin alloué */
 			}
 			else /* Si la commande n'existe pas | ligne 99 */
@@ -68,6 +73,9 @@ void shell_loop(char **argv, char **envp)
 		}
 		free(args); /* Libère les arguments à la fin de l’itération */
 	}
+	if (!isatty(STDIN_FILENO))
+		exit(exit_status);
+
 	free(line); /* Libère la ligne après sortie de la boucle */
 }
 
@@ -81,9 +89,9 @@ void shell_loop(char **argv, char **envp)
  */
 int main(int argc, char **argv, char **envp)
 {
-	(void)argc; /* argc est inutilisé, on l’annule pour éviter un warning */
+	(void)argc;				/* argc est inutilisé, on l’annule pour éviter un warning */
 	shell_loop(argv, envp); /* Lance la boucle principale du shell */
-	return (0); /* Terminaison normale du shell */
+	return (0);				/* Terminaison normale du shell */
 }
 
 /*
