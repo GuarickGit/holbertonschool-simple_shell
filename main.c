@@ -17,27 +17,22 @@ void remove_trailing_newline(char *line)
 		if (line[i] == '\n') /* Si on trouve un saut de ligne */
 		{
 			line[i] = '\0'; /* On le remplace par le terminateur */
-			break; /* On sort, car il ne peut y en avoir qu'un à la fin */
+			break;			/* On sort, car il ne peut y en avoir qu'un à la fin */
 		}
 	}
 }
 
 /**
- * main - Point d'entrée du shell
- * @argc: nombre d'arguments passés (non utilisé ici)
- * @argv: tableau des arguments (argv[0] = nom du programme)
- * @envp: tableau contenant les variables d'environnement
- *
- * Return: 0 en cas de succès
+ * shell_loop - Boucle principale du shell
+ * @argv: arguments du programme (argv[0] = nom)
+ * @envp: tableau des variables d'environnement
  */
-int main(int argc, char **argv, char **envp)
+void shell_loop(char **argv, char **envp)
 {
 	char *line = NULL, *full_path; /* Ligne entrée + chemin final */
 	size_t len = 0; /* Taille allouée à getline */
 	ssize_t n_read; /* Nombre de caractères lus */
 	char **args; /* Tableau des mots (commande + args) */
-
-	(void)argc; /* argc est inutilisé, on l’annule pour éviter un warning */
 
 	while (1) /* Boucle infinie du shell */
 	{
@@ -48,7 +43,7 @@ int main(int argc, char **argv, char **envp)
 		if (n_read == -1) /* Si EOF (Ctrl+D) ou erreur */
 		{
 			printf("\n");
-			free(line);
+			free(line); /* Libère la ligne si EOF */
 			exit(0);
 		}
 
@@ -62,19 +57,32 @@ int main(int argc, char **argv, char **envp)
 				free(args); /* Libère args, ligne libérée dans handle_builtin si exit */
 				continue; /* Repart pour une nouvelle commande */
 			}
-			/* Cherche la commande dans le PATH */
-			full_path = find_full_path(args[0], envp);
+			full_path = find_full_path(args[0], envp); /* Cherche cmd dans PATH */
 			if (full_path)
 			{
 				execute_command(full_path, args, envp); /* Exécute la commande */
 				free(full_path); /* Libère le chemin alloué */
 			}
-			else /* Si la commande n'existe pas | Détail ligne 78 */
+			else /* Si la commande n'existe pas | ligne 99 */
 				fprintf(stderr, "%s: 1: %s: not found\n", argv[0], args[0]);
 		}
 		free(args); /* Libère les arguments à la fin de l’itération */
 	}
 	free(line); /* Libère la ligne après sortie de la boucle */
+}
+
+/**
+ * main - Point d'entrée du shell
+ * @argc: nombre d'arguments passés (non utilisé ici)
+ * @argv: tableau des arguments (argv[0] = nom du programme)
+ * @envp: tableau contenant les variables d'environnement
+ *
+ * Return: 0 en cas de succès
+ */
+int main(int argc, char **argv, char **envp)
+{
+	(void)argc; /* argc est inutilisé, on l’annule pour éviter un warning */
+	shell_loop(argv, envp); /* Lance la boucle principale du shell */
 	return (0); /* Terminaison normale du shell */
 }
 
@@ -83,5 +91,3 @@ int main(int argc, char **argv, char **envp)
  * Le format suit celui de /bin/sh : "./hsh: 1: commande: not found".
  * argv[0] = "./hsh", 1 = ligne simulée, args[0] = commande entrée.
  */
-
-
