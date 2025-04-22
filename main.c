@@ -46,7 +46,11 @@ int main(int argc, char **argv, char **envp)
 
 		n_read = getline(&line, &len, stdin); /* Attend que l'utilisateur tape */
 		if (n_read == -1) /* Si EOF (Ctrl+D) ou erreur */
-			break;
+		{
+			printf("\n");
+			free(line);
+			exit(0);
+		}
 
 		remove_trailing_newline(line); /* Supprime le \n final de la ligne */
 		args = parse_line(line); /* Découpe la ligne en mots */
