@@ -17,7 +17,8 @@ char *get_path_from_env(char **envp);
 void remove_trailing_newline(char *line);
 char **parse_line(char *line);
 char *find_full_path(char *command, char **envp);
-void execute_command(char *command, char **args, char **envp);
+int execute_command(char *command, char **args, char **envp);
 int handle_builtin(char **args, char **envp, char *line);
+
 
 #endif /* MAIN_H */
