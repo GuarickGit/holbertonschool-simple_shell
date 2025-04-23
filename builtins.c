@@ -26,9 +26,9 @@ int handle_builtin(char **args, char **envp, char *line)
 		free(line);
 		/* Termine le programme */
 		if (isatty(STDIN_FILENO))
-			exit(0);
+			exit(2);   // Interactif → code 2
 		else
-			exit(2);
+			exit(0);   // Non-interactif → code 0
 	}
 
 	/* Vérifie si la commande est "env" */
