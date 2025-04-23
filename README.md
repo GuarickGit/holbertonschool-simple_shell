@@ -1,6 +1,6 @@
 # Welcome to the projet C - Simple Shell
 
-![alt text](image.png)
+![alt text](https://s3.eu-west-3.amazonaws.com/hbtn.intranet.project.files/holbertonschool-low_level_programming/235/shell.jpeg)
 
 ## mini_shell
 ## Description
