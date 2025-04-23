@@ -1,0 +1,52 @@
+.TH simple_shell 1 "Avril 2025" "Version 1.0" "Simple Shell Manual"
+
+.SH NAME
+simple_shell \- un shell Unix simple implémenté en C
+
+.SH SYNOPSIS
+.B ./hsh
+.RI [commandes]
+
+.SH DESCRIPTION
+.B simple_shell
+est un shell minimaliste qui exécute des commandes Unix à la manière de /bin/sh.
+
+Ce shell supporte :
+- L'exécution de commandes via
+.BR execve (2)
+- Les modes
+.B interactif
+et
+.B non-interactif
+- Les commandes internes :
+.BR exit
+et
+.BR env
+- La recherche dans les chemins définis par la variable
+.BR PATH
+
+.SH USAGE
+
+.TP
+.B ./hsh
+Lance le shell en mode interactif (affiche un prompt `$`).
+
+.TP
+.B echo "ls" | ./hsh
+Utilisation en mode non-interactif avec une commande en entrée standard.
+
+.SH EXIT STATUS
+0 si succès, 127 si la commande est introuvable.
+
+.SH AUTHORS
+Kevin Fresne
+<https://github.com/GuarickGit>
+
+Sanoussy Fofana
+<https://github.com/samamtro>
+
+.SH SEE ALSO
+.BR sh (1),
+.BR execve (2),
+.BR fork (2),
+.BR wait (2)
