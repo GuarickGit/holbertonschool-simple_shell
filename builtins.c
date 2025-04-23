@@ -24,8 +24,11 @@ int handle_builtin(char **args, char **envp, char *line)
 		free(args);
 		/* Libère la ligne lue */
 		free(line);
-		/* Termine le programme avec un code de succès */
-		exit(2);
+		/* Termine le programme */
+		if (isatty(STDIN_FILENO))
+			exit(0);
+		else
+			exit(2);
 	}
 
 	/* Vérifie si la commande est "env" */
