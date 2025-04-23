@@ -68,7 +68,7 @@ void shell_loop(char **argv, char **envp)
 				exit_status = execute_command(full_path, args, envp);
 				free(full_path); /* Libère le chemin alloué */
 			}
-			else /* Si la commande n'existe pas | ligne 99 */
+			else /* Si la commande n'existe pas | ligne 101 */
 			{
 				fprintf(stderr, "%s: 1: %s: not found\n", argv[0], args[0]);
 				exit_status = 127;
