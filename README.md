@@ -114,8 +114,8 @@ man ./man_1_simple_shell
 $ ./hsh
 $ ls
 AUTHORS  builtins.c  execute.c  handle_path.c  main.c  main.h  man_1_simple_shell  parse_input.c  README.md  utils.c
-$ echo Hello Axel
-Hello Axel
+$ echo Hello Axel, my Favorite SWE !
+Hello Axel, my Favorite SWE !
 $ exit
 ```
 ### Exemple non-interactif
@@ -124,8 +124,8 @@ $ echo "ls" | ./hsh
 AUTHORS  builtins.c  execute.c  handle_path.c  main.c  main.h  man_1_simple_shell  parse_input.c  README.md  utils.c
 ```
 ```bash
-$ echo "echo Hello Axel" | ./hsh
-Hello Axel
+$ echo "echo Hello Axel, my Favorite SWE !" | ./hsh
+Hello Axel, my Favorite SWE !
 ```
 
 ## 7️⃣ Liste des fonctions
