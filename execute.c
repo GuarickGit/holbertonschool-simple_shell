@@ -38,10 +38,13 @@ int execute_command(char *command, char **args, char **envp)
 	}
 	else
 	{
+		/* Le parent attend la fin du processus fils */
 		wait(&status);
+		/* Vérifie si le fils s’est terminé normalement (par exit) */
 		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
+			return (WEXITSTATUS(status)); /* Retourne le code de sortie du fils */
 		else
+		/* Si le processus fils s’est terminé de manière anormale (signal, etc.) */
 			return (-1);  /* fin anormale */
 	}
 }
