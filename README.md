@@ -75,8 +75,12 @@ flowchart TD
     L -- Oui --> M[Fork du processus]:::exec
     M --> N{Processus fils ?}:::exec
     N -- Oui --> O[Exécuter commande avec execve]:::exec
-    O --> P[Échec execve ? → exit127]:::error
-    N -- Non --> Q[Attendre le fils avec wait]:::exec
+    O --> P{execve échoue ?}:::error
+    P -- Oui --> X[Fils: exit127]:::error
+    P -- Non --> Y[Fils: commande exécutée]:::exec
+    X --> Q[Parent: attendre le fils avec wait]:::exec
+    Y --> Q
+    N -- Non --> Q
     Q --> R[Retour à la boucle]:::control
     J --> R
     Z --> R
