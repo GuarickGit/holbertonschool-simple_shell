@@ -62,11 +62,11 @@ void shell_loop(char **argv, char **envp)
 				/* free(args); Libère args, ligne libérée dans handle_builtin si exit */
 				continue; /* Repart pour une nouvelle commande */
 			}
-			full_path = find_full_path(args[0], envp); /* Cherche cmd dans PATH */
-			if (full_path)
+			full_path = find_full_path(args[0], envp); /* Cherche le chemin complet de la commande dans le PATH */
+			if (full_path) /* Si un chemin valide a été trouvé */
 			{
-				exit_status = execute_command(full_path, args, envp);
-				free(full_path); /* Libère le chemin alloué */
+				exit_status = execute_command(full_path, args, envp); /* Exécute la commande et récupère le code de retour */
+				free(full_path); /* Libère la mémoire allouée pour le chemin complet */
 			}
 			else /* Si la commande n'existe pas | ligne 101 */
 			{
@@ -76,8 +76,8 @@ void shell_loop(char **argv, char **envp)
 		}
 		free(args); /* Libère les arguments à la fin de l’itération */
 	}
-	if (!isatty(STDIN_FILENO))
-		exit(exit_status);
+	if (!isatty(STDIN_FILENO)) /* Si le shell était en mode non interactif */
+		exit(exit_status); /* Quitte en renvoyant le dernier code de retour */
 
 	free(line); /* Libère la ligne après sortie de la boucle */
 }
