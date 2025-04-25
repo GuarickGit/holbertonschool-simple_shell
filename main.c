@@ -59,7 +59,6 @@ void shell_loop(char **argv, char **envp)
 		{
 			if (handle_builtin(args, envp, line)) /* Si c'est un builtin */
 			{
-				/* free(args); Libère args, ligne libérée dans handle_builtin si exit */
 				continue; /* Repart pour une nouvelle commande */
 			}
 			full_path = find_full_path(args[0], envp); /* Cherche le chemin complet de la commande dans le PATH */
