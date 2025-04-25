@@ -14,8 +14,8 @@
  */
 int execute_command(char *command, char **args, char **envp)
 {
-	int status;
-	pid_t pid;
+	int status; /* Contiendra les informations de sortie du processus fils */
+	pid_t pid; /* Identifiant du processus créé par fork() */
 
 	/* Création d'un nouveau processus */
 	pid = fork();
@@ -41,10 +41,10 @@ int execute_command(char *command, char **args, char **envp)
 		/* Le parent attend la fin du processus fils */
 		wait(&status);
 		/* Vérifie si le fils s’est terminé normalement (par exit) */
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status)); /* Retourne le code de sortie du fils */
+		if (WIFEXITED(status)) /* Vérifie si le fils s’est terminé normalement (via exit ou return) */
+			return (WEXITSTATUS(status)); /* Récupère le code de sortie si le fils s’est terminé normalement */
 		else
 		/* Si le processus fils s’est terminé de manière anormale (signal, etc.) */
-			return (-1);  /* fin anormale */
+			return (-1); /* fin anormale */
 	}
 }
